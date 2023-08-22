@@ -1,0 +1,14 @@
+{
+  "name": "electron",
+  "version": "1.0.0",
+  "description": "Para la materia de Base De Datos Para Aplicaciones",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Ruben Vega",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^26.0.0"
+  }
+}

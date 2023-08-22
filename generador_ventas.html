@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador</title>
+    <script>
+        const productos = [
+            [  '01',  'Camiseta de algodón', '19.99'],
+            [  '02',  'Pantalones vaqueros', '39.95'],
+            [  '03',  'Zapatillas deportivas', '59.99'],
+            [  '04',  'Reloj de pulsera', '89.50'],
+            [  '05',  'Bolso de cuero', '79.95'],
+            [  '06',  'Auriculares inalámbricos', '49.99'],
+            [  '07',  'Teclado mecánico para juegos', '129.00'],
+            [  '08',  'Cámara digital', '299.95' ],
+            [  '09',  'Portátil ultrafino', '899.99'],
+            [  '10',  'Licuadora de alta potencia', '129.95']
+    ];
+
+        var salida = `
+            USE pos;<br>
+            INSERT INTO ventas (id, fecha, hora) VALUES<br> 
+        `;
+        var salida2 = `
+            INSERT INTO venta_detalle (id_venta, cantidad, nombre, precio) VALUES<br>
+        `;
+        function generarDatos(){
+            salida = `
+            USE pos;<br>
+            DELETE FROM ventas_detalle;<br>
+            DELETE FROM ventas;<br>
+            INSERT INTO ventas (id, fecha, hora) VALUES<br> 
+            `;
+            for (let i = 1; i < 10001; i++) {
+                salida +="('"+ i +"','"+generarFecha()+"','"+generarHora()+"'),<br>";    
+            }
+            salida = salida.slice(0,-5)+";<br>"+salida2;
+            for (let i = 1; i < 10001; i++) {
+                var cantidadProductos = Math.floor(Math.random()*10+4)
+                for (let j = 1; j < cantidadProductos; j++) {
+                    var idProducto = productos[Math.floor(Math.random()*10)];
+                    salida += "('"+i+"','"+Math.floor(Math.random()*10+2)+"','"+idProducto[1]+"','"+idProducto[2]+"'),"+"<br>";
+                }
+
+            }
+            salida = salida.slice(0,-5)+";"+"<br>";
+            document.getElementById("idecito").innerHTML=salida;
+        }
+        function generarFecha(){
+            return (
+                new Date(
+                    new Date(2000, 1, 1).getTime() + Math.random() * (new Date().getTime() - new Date(2000, 1, 1).getTime())
+                )
+            ).toISOString().split('T')[0];
+        }
+        function generarHora(){
+            return (
+                new Date(
+                    new Date(2000, 1, 1).getTime() + Math.random() * (new Date().getTime() - new Date(2000, 1, 1).getTime())
+                )
+            ).toISOString().split('T')[1].split('.')[0];
+        }
+        function generarArchivo() {
+        alert("Generando archivo SQL");
+        var var1 = document.createElement("a");
+        salida = salida.replaceAll("<br>", "\r\n");
+        var1.setAttribute(
+          "href",
+          "data:text/plain;charset=UTF-8," + encodeURIComponent(salida)
+        );
+        var1.setAttribute("download", "POS.sql");
+        var1.style.display = "none";
+        document.body.appendChild(var1);
+        var1.click();
+        document.body.removeChild(var1);
+      }
+    </script>
+</head>
+<body>
+    <button onclick="generarDatos()">GENERAR DATOS</button>
+    <button onclick="generarArchivo()">GENERAR SQL</button>
+    <p id="idecito"></p>
+</body>
+</html>
